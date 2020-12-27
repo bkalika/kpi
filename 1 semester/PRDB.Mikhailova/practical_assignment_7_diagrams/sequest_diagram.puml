@@ -1,0 +1,47 @@
+@startuml
+participant "User" as user
+participant "Filter" as filter
+participant "User client" as user_client
+participant "CSP Gateway" as gateway
+participant "CSP page" as csp
+participant "REST Broker" as rest
+participant "SoapHandler" as soap
+
+activate user
+user -> filter : HTTP request
+activate filter
+filter -> gateway : Sending as Gateway
+deactivate filter
+activate gateway
+
+alt csp
+gateway -> csp : Dispatching a shop.csp
+activate csp
+csp -> csp : Request processing
+csp -> csp : Forming a response
+csp --> gateway : response
+deactivate csp
+
+else rest
+gateway -> rest : Dispatching a RESTBroker.cls
+activate rest
+rest -> rest : Request processing
+rest -> rest : Forming a response
+rest --> gateway : response
+deactivate rest
+
+else soap
+gateway -> soap : Dispatching SoapHandler.cls
+activate soap
+soap -> soap : Request processing
+soap -> soap : Forming a response
+soap --> gateway : response
+deactivate soap
+
+end
+
+gateway --> user : Sending a HTTP response
+deactivate gateway
+deactivate user
+
+@enduml

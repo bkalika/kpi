@@ -1,0 +1,11 @@
+#cloud-config
+ssh_pwauth: True
+disable_root: false
+password: 'w9nmBXvxf9H9'
+chpasswd: {expire: false}
+bootcmd: 
+  - apt-get update
+  - sudo apt-get install python2.7
+  - python3 /root/lab5.py > /root/out.txt
+  - /root/out.txt
+  

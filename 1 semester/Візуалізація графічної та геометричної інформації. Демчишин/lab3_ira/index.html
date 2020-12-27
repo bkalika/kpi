@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>continious surface of cassini</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }      
+    </style>
+</head>
+<body>
+    <script src="three.js"></script>
+    <script>
+        // Посилання на картинки завантажені на сайті  https://postimages.org/ru/
+        var TextureLinkImg=[
+        "https://i.postimg.cc/2jhmbPb3/3.jpg",
+        "https://i.postimg.cc/cJC0vCwN/1.jpg",
+        "https://i.postimg.cc/sgDRLxnZ/4.jpg",
+        "https://i.postimg.cc/tTP06xg8/image.jpg"       
+        ];
+
+// створення сцени для відображення фігури
+        var scene = new THREE.Scene();
+        //колір фону сцени
+        scene.background = new THREE.Color(0xFFAAFF);
+        const aspect = 2;
+        const close = 0.1;
+        //відстань відображення
+        const distance = 1000;
+        //кут відображення поля зору
+        const FieldOfView = 40;
+        //створення камери
+        const camera = new THREE.PerspectiveCamera(FieldOfView, aspect, close, distance);
+        //рендер
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        //математична функція що малює фігуру 
+        var parametricEquation = function (v, u, target) {
+         u = 2 * u * Math.PI;
+            v = 2 * v * Math.PI;
+            var z = (v/2/Math.PI)*16/3-8/3;
+            let c = 3*z;
+            const a = 8;
+            let inner = c*c*Math.cos(2*u)+Math.sqrt(Math.pow(a,4)-Math.pow(c,4)*Math.pow(Math.sin(2*u),2));
+            var r = Math.sqrt(inner);
+            var x = r * Math.cos(u);
+            var y = r * Math.sin(u);
+            console.log(`x:${x} y:${y} z:${z}`)
+            target.set(x*0.7, y*0.8, z*3).multiplyScalar(0.1);
+        }
+
+function MainMapImageConvas( size, url ) {
+            var imageCanvas = document.createElement( "canvas" );
+            var context = imageCanvas.getContext( "2d" );
+            var img = new Image();
+            img.crossOrigin = "";
+            imageCanvas.width = imageCanvas.height = size;
+            context.fillStyle="#f71707";
+            img.src=url;
+            img.onload = function(){  
+                context.fillStyle = context.createPattern(img, "repeat");
+                context.fillRect( 0, 0, size, size );
+            }
+            context.fillRect( 0, 0, size, size );
+            return imageCanvas;
+        }
+
+
+        //Текстури для нашої моделі parametricEquation
+        var texture = new THREE.TextureLoader().load(TextureLinkImg[0]);
+            texture.mipmaps[0] = MainMapImageConvas(8, TextureLinkImg[0]);
+            texture.mipmaps[1] = MainMapImageConvas(4, TextureLinkImg[1]);
+            texture.mipmaps[2] = MainMapImageConvas(2, TextureLinkImg[2]);
+            texture.mipmaps[3] = MainMapImageConvas(1, TextureLinkImg[3]);
+          //логування 
+        console.log(texture.mipmaps);
+        texture.wrapS =THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.minFilter = THREE.LicloseMipMapcloseestFilter;
+        
+        texture.needsUpdate = true;
+        texture.repeat.set( 25, 25 );
+        var material = new THREE.MeshBasicMaterial({ map: texture });
+
+        var geometry = new THREE.ParametricGeometry(parametricEquation, 250,250);
+        var klein = new THREE.Mesh(geometry, material);
+        klein.position.set(0.2, 0.2,-10);
+        scene.add(klein);
+
+        window.addEventListener("wheel", function(e) {
+            var dir = Math.sign(e.deltaY);
+            camera.position.z+=dir*10;
+        });
+
+        camera.position.z = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            camera.updateProjectionMatrix();
+            klein.rotation.x += 0.01;
+            klein.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }      
+    </style>
+</head>
+<body>
+	<script type="text/javascript" src="three.js"></script>
+    <script type="text/javascript" src="view.js"></script>
+    <script type="text/javascript" src="texture.js"></script>
+    <script>
+       
+       
+        window.addEventListener("wheel", function(e) {
+            var dir = Math.sign(e.deltaY);
+            camera.position.z+=dir;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            camera.updateProjectionMatrix();
+
+            SnailFigure.rotation.x += 0.01;
+            SnailFigure.rotation.y += 0.01;
+            
+            renderer.render(scene, camera);
+        }
+        animate();
+
+    </script>
+</body>
+</html>

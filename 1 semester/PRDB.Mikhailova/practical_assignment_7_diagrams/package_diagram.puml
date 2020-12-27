@@ -1,0 +1,19 @@
+@startuml
+package  "/csp/user" as site {
+    package "shop.csp" {
+        package "Class Product.cls"
+        package "Class Client.cls"
+        package "Class Order.cls"
+    }
+
+    package ProductSOAP as soap {
+        package "Class BrokerSOAP.cls"
+        package "Class SoapHandler.cls"
+    }
+    
+    package ProductREST as rest {
+        package "Class BrokerREST.cls"
+        package "Class JSON.cls"
+    }
+}
+@enduml

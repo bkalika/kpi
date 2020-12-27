@@ -1,0 +1,19 @@
+@startuml
+(*) --> "HTTP request"
+
+if "Is the CSP request?" then
+    --> [true] "Sending a static content"
+    --> (*)
+else
+    --> "Dispatching to a session"
+    if "Is a class or static?" then
+        --> "OnPage Method"
+        -> "Forming a response"
+    else
+        --> [static] "Finding a static\nfile and sendign back to the client"
+    endif
+    --> "Forming a response"
+    --> "Sending a response as a HTTP"
+    --> (*)
+endif
+@enduml

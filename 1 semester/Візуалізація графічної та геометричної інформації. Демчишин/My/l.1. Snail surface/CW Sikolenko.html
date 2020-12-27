@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Three.js Geometry Browser</title>
+		<style>
+			canvas {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+			body{
+				margin: 0px;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script type="module">
+			import {
+				ArrowHelper,
+				BufferGeometry,
+				Color,
+				Curve, CanvasTexture,
+				DoubleSide,
+				DirectionalLight,
+				Float32BufferAttribute,
+				FontLoader, BackSide, FrontSide,
+				Group,
+				LineSegments,
+				LineBasicMaterial,
+				Mesh,
+				MeshPhongMaterial, MeshBasicMaterial,
+				ParametricGeometry, ParametricBufferGeometry,
+				PlaneGeometry, PlaneBufferGeometry,
+				PerspectiveCamera,
+				PointLight,
+				RepeatWrapping,
+				Scene,
+				SphereGeometry, SphereBufferGeometry,
+				Shape,
+				TextGeometry, TextBufferGeometry,
+				TextureLoader,
+				Vector2,
+				Vector3,
+				WireframeGeometry,
+				WebGLRenderer
+			} from "https://threejs.org/build/three.module.js";
+
+			import { OrbitControls } from 'https://threejs.org/examples/jsm/controls/OrbitControls.js';
+			import { ParametricGeometries } from 'https://threejs.org/examples/jsm/geometries/ParametricGeometries.js';
+
+
+
+			const scene = new Scene();
+			scene.background = new Color( 0x777777 );
+
+			const camera = new PerspectiveCamera( 20, window.innerWidth / window.innerHeight, 0.1, 150 );
+			camera.position.z = 30;
+			camera.position.y = -30;
+
+			const renderer = new WebGLRenderer( { antialias: true } );
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			const orbit = new OrbitControls( camera, renderer.domElement );
+			orbit.enableZoom = false;
+
+			var PL = new PointLight( "#fff", 1, 0 );
+			var PL2 = new PointLight( "#fff", 1, 0 );
+			PL.position.set(0, 0, 12);
+			PL2.position.set(0, 0, -12);
+
+			scene.add( PL );
+			scene.add( PL2 );
+
+			var r = parseInt(prompt("r = ", 5));
+			var a = parseInt(prompt("a = ", 2));
+			var tau = parseInt(prompt("tau = ", 0));
+
+			let Astroidal = function (u, v, target) {
+				u *= Math.PI;
+				v *= 2 * Math.PI;
+
+				u = u * 2;
+
+				var x, y, z;
+				x = (r + a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.cos(tau) - a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.sin(tau)) * Math.cos(v);
+				y = (r + a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.cos(tau) - a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.sin(tau)) * Math.sin(v);
+				z = a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.sin(tau) + a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.cos(tau);
+
+				target.set( x, y, z );
+			};
+
+			function calcPoint (u, v) {
+				u *= Math.PI;
+				v *= 2 * Math.PI;
+
+				u = u * 2;
+
+				var x, y, z;
+				x = (r + a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.cos(tau) - a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.sin(tau)) * Math.cos(v);
+				y = (r + a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.cos(tau) - a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.sin(tau)) * Math.sin(v);
+				z = a*(Math.cos(u)*Math.cos(u)*Math.cos(u))*Math.sin(tau) + a*(Math.sin(u)*Math.sin(u)*Math.sin(u))*Math.cos(tau);
+
+				return [x, y, z];
+			};
+
+
+			function calcVector(u, v, x, y, z){
+				let f = calcPoint(u, v);
+
+				let du = 0.001;
+				let fdu = calcPoint(u+du, v);				
+				let tu = [(fdu[0]-f[0])/du, (fdu[1]-f[1])/du, (fdu[2]-f[2])/du];
+
+				let dv = 0.001;
+				let fdv = calcPoint(u, v+dv);
+				let tv = [(fdv[0]-f[0])/dv, (fdv[1]-f[1])/dv, (fdv[2]-f[2])/dv];
+
+				
+				let N = [tu[1]*tv[2] - tu[2]*tv[1], tu[2]*tv[0] - tu[0]*tv[2], tu[0]*tv[1] - tu[1]*tv[0]];
+				
+				return [f, tu, tv, N]
+			}
+
+
+
+			const group = new Group();
+			const VectorGroup = new Group();
+			const material = new MeshPhongMaterial( { color: "#0f0", side: BackSide, flatShading: true } );
+
+			const pg = new ParametricGeometry(Astroidal, 100, 100);
+
+			const mpg = new Mesh( pg, material );
+			
+			group.add( mpg );
+
+			scene.add( group );
+			scene.add( VectorGroup );
+
+			let pointU = 0;
+			let pointV = 0;
+			
+			let step = 0.01;
+			document.addEventListener('keydown', function(e){
+				if(e.code == "KeyA"){
+					pointV -= step;
+				}
+				if(e.code == "KeyD"){
+					pointV += step;
+				}
+				if(e.code == "KeyW"){
+					pointU += step;
+				}
+				if(e.code == "KeyS"){
+					pointU -= step;
+				}
+			});
+
+			
+
+			function render() {
+				requestAnimationFrame( render );
+				
+				VectorGroup.clear();
+				
+				let vectors = calcVector(pointU, pointV);
+				
+				const uvector = new Vector3( vectors[1][0], vectors[1][1], vectors[1][2] );
+				const vvector = new Vector3( vectors[2][0], vectors[2][1], vectors[2][2] );
+				const Nvector = new Vector3( vectors[3][0], vectors[3][1], vectors[3][2] );
+				uvector.normalize();
+				vvector.normalize();
+				Nvector.normalize();
+				const origin = new Vector3( vectors[0][0], vectors[0][1], vectors[0][2] );
+				const length = 4;
+				const uvectorHelper = new ArrowHelper( uvector, origin, length, "#00f" );
+				const vvectorHelper = new ArrowHelper( vvector, origin, length, "#f00" );
+				const NvectorHelper = new ArrowHelper( Nvector, origin, length, "#fff" );
+				VectorGroup.add( uvectorHelper );
+				VectorGroup.add( vvectorHelper );
+				VectorGroup.add( NvectorHelper );
+				
+				renderer.render( scene, camera );
+			}
+			
+			window.addEventListener( 'resize', function () {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}, false );
+
+
+			render();
+			
+
+		</script>
+		<div style = "position: fixed; top: 0; right: 0; background-color: white; color: black">
+			Press Space to start Point Light moving;<br/>
+			Use arrow keys and right shift and ctrl to move Directional Light<br/>
+		</div>
+	</body>
+</html>

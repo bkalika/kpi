@@ -1,0 +1,12 @@
+#cloud-config
+ssh_pwauth: True
+disable_root: false
+password: 12345678
+chpasswd: {expire: false}
+bootcmd:
+  - echo "nameserver 8.8.8.8" | tee /etc/resolvconf/resolv.conf.d/base > /dev/null
+  - service resolvconf restart
+  - apt-get update
+  - sshpass -p "y7Sam>#b" scp cloud-user5@cloud-11.bitp.kiev.ua:/home/cloud-user5/da82m01/lab5/lab5.py /root
+  - python3 /root/lab5.py > /root/lab1.csv
+

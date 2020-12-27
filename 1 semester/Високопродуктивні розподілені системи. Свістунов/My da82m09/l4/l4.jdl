@@ -1,0 +1,19 @@
+[
+  Type = "job";
+  JobType = "normal";
+  Executable = "l4.sh";
+  StdOutput = "l4.out";
+  StdError = "l4.err";
+  OutputSandbox = {
+    "l4.out",
+    "l4.err"
+  };
+  RetryCount = 0;
+  ShallowRetryCount = 1;
+  OutputSandboxBaseDestUri = "gsiftp://localhost";
+  InputSandbox = {
+    "l4.sh",
+    "main.py"
+  };
+  DefaultRank = -other.GlueCEStateEstimatedResponseTime;
+]
