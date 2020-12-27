@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="57d00f56-f50a-4c1d-a929-7968767826c9" activeEnvironment="Default" name="ShopSOAPService.ShopSOAP" soapui-version="5.6.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="84a33dc7-017a-4667-8266-4516cafdc91f" wsaVersion="NONE" name="ShopSOAPSoap" type="wsdl" bindingName="{http://tempuri.org}ShopSOAPSoap" soapVersion="1_1" anonymous="optional" definition="http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls?WSDL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls?WSDL"><con:part><con:url>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls?WSDL</con:url><con:content><![CDATA[<definitions targetNamespace="http://tempuri.org" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://tempuri.org" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org">
+      <s:element name="CreateAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="address" type="s0:Address"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element minOccurs="0" name="Code" type="s:string"/>
+          <s:element minOccurs="0" name="Country" type="s:string"/>
+          <s:element minOccurs="0" name="City" type="s:string"/>
+          <s:element minOccurs="0" name="Street" type="s:string"/>
+          <s:element minOccurs="0" name="Building" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CreateAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="CreateAddressResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="addressId" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="DeleteAddressResult" type="s:base64Binary"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllAddresses">
+        <s:complexType>
+          <s:sequence/>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllAddressesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="GetAllAddressesResult" type="s0:DataSet"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DataSet">
+        <s:sequence>
+          <s:element ref="s:schema"/>
+          <s:any/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="UpdateAddress">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" name="addressId" type="s:string"/>
+            <s:element minOccurs="0" name="address" type="s0:Address"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateAddressResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="UpdateAddressResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="CreateAddressSoapIn">
+    <part name="parameters" element="s0:CreateAddress"/>
+  </message>
+  <message name="CreateAddressSoapOut">
+    <part name="parameters" element="s0:CreateAddressResponse"/>
+  </message>
+  <message name="DeleteAddressSoapIn">
+    <part name="parameters" element="s0:DeleteAddress"/>
+  </message>
+  <message name="DeleteAddressSoapOut">
+    <part name="parameters" element="s0:DeleteAddressResponse"/>
+  </message>
+  <message name="GetAllAddressesSoapIn">
+    <part name="parameters" element="s0:GetAllAddresses"/>
+  </message>
+  <message name="GetAllAddressesSoapOut">
+    <part name="parameters" element="s0:GetAllAddressesResponse"/>
+  </message>
+  <message name="UpdateAddressSoapIn">
+    <part name="parameters" element="s0:UpdateAddress"/>
+  </message>
+  <message name="UpdateAddressSoapOut">
+    <part name="parameters" element="s0:UpdateAddressResponse"/>
+  </message>
+  <portType name="ShopSOAPSoap">
+    <operation name="CreateAddress">
+      <input message="s0:CreateAddressSoapIn"/>
+      <output message="s0:CreateAddressSoapOut"/>
+    </operation>
+    <operation name="DeleteAddress">
+      <input message="s0:DeleteAddressSoapIn"/>
+      <output message="s0:DeleteAddressSoapOut"/>
+    </operation>
+    <operation name="GetAllAddresses">
+      <input message="s0:GetAllAddressesSoapIn"/>
+      <output message="s0:GetAllAddressesSoapOut"/>
+    </operation>
+    <operation name="UpdateAddress">
+      <input message="s0:UpdateAddressSoapIn"/>
+      <output message="s0:UpdateAddressSoapOut"/>
+    </operation>
+  </portType>
+  <binding name="ShopSOAPSoap" type="s0:ShopSOAPSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="CreateAddress">
+      <soap:operation soapAction="http://tempuri.org/ShopSOAPService.ShopSOAP.CreateAddress" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="DeleteAddress">
+      <soap:operation soapAction="http://tempuri.org/ShopSOAPService.ShopSOAP.DeleteAddress" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="GetAllAddresses">
+      <soap:operation soapAction="http://tempuri.org/ShopSOAPService.ShopSOAP.GetAllAddresses" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="UpdateAddress">
+      <soap:operation soapAction="http://tempuri.org/ShopSOAPService.ShopSOAP.UpdateAddress" style="document"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="ShopSOAP">
+    <port name="ShopSOAPSoap" binding="s0:ShopSOAPSoap">
+      <soap:address location="http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls</con:endpoint></con:endpoints><con:operation id="03cdf591-9526-4c75-b1e0-5240cc859890" isOneWay="false" action="http://tempuri.org/ShopSOAPService.ShopSOAP.CreateAddress" name="CreateAddress" bindingOperationName="CreateAddress" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="37b2dc3b-402b-4835-9873-42465153b1f5" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <tem:CreateAddress>\r
+         <!--Optional:-->\r
+         <tem:address>\r
+            <!--Optional:-->\r
+            <tem:Code>23</tem:Code>\r
+            <!--Optional:-->\r
+            <tem:Country>Italy+</tem:Country>\r
+            <!--Optional:-->\r
+            <tem:City>Milan+</tem:City>\r
+            <!--Optional:-->\r
+            <tem:Street>Sportivna+</tem:Street>\r
+            <!--Optional:-->\r
+            <tem:Building>Stadiu+</tem:Building>\r
+         </tem:address>\r
+      </tem:CreateAddress>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://tempuri.org/ShopSOAPService.ShopSOAP.CreateAddress"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="fabe2b57-3672-4fe3-bf90-fb377b4526ec" isOneWay="false" action="http://tempuri.org/ShopSOAPService.ShopSOAP.DeleteAddress" name="DeleteAddress" bindingOperationName="DeleteAddress" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="ea951eea-0d88-46a2-b69f-0dab3df7aacb" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <tem:DeleteAddress>\r
+         <!--Optional:-->\r
+         <tem:addressId>77</tem:addressId>\r
+      </tem:DeleteAddress>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://tempuri.org/ShopSOAPService.ShopSOAP.DeleteAddress"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="dd5bd41d-665c-4366-bad1-e5daf610e77f" isOneWay="false" action="http://tempuri.org/ShopSOAPService.ShopSOAP.GetAllAddresses" name="GetAllAddresses" bindingOperationName="GetAllAddresses" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="4676d057-7a1c-46de-a227-2a904ef89255" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <tem:GetAllAddresses/>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://tempuri.org/ShopSOAPService.ShopSOAP.GetAllAddresses"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="9167c74d-fca8-44a5-b3a6-2f1a11564fcd" isOneWay="false" action="http://tempuri.org/ShopSOAPService.ShopSOAP.UpdateAddress" name="UpdateAddress" bindingOperationName="UpdateAddress" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f7569ae2-1c82-4712-8651-91f9ba2e6644" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:57772/csp/user/ShopSOAPService.ShopSOAP.cls</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <tem:UpdateAddress>\r
+         <!--Optional:-->\r
+         <tem:addressId>95</tem:addressId>\r
+         <!--Optional:-->\r
+         <tem:address>\r
+            <!--Optional:-->\r
+            <tem:Code>555</tem:Code>\r
+            <!--Optional:-->\r
+            <tem:Country>France</tem:Country>\r
+            <!--Optional:-->\r
+            <tem:City>Paris</tem:City>\r
+            <!--Optional:-->\r
+            <tem:Street>near Eiffel tower</tem:Street>\r
+            <!--Optional:-->\r
+            <tem:Building>Eiffel tower</tem:Building>\r
+         </tem:address>\r
+      </tem:UpdateAddress>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://tempuri.org/ShopSOAPService.ShopSOAP.UpdateAddress"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

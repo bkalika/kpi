@@ -1,0 +1,55 @@
+@startuml
+left to right direction
+actor "customer" as user
+
+actor "admin" as admin
+
+
+
+rectangle Product as "Products page" {
+    usecase "Get" as get_products
+    usecase "Add to a cart" as add
+    usecase "Delete from the cart" as delete_product
+    usecase "See details" as details
+}
+
+user --> get_products
+user --> add
+user --> delete_product
+user --> details
+
+rectangle Orders as "Cart page" {
+    usecase "Get" as get
+    usecase "Buy" as buy
+    usecase "Delete" as delete
+}
+user --> get
+user --> buy
+user --> delete
+
+rectangle Admin as "Admin page" {
+    usecase "Get products" as aget
+    usecase "Add a product" as aadd
+    usecase "Delete a product" as adelete
+    usecase "Change price" as change_p
+}
+' admin page:
+aget <-- admin
+aadd <-- admin
+adelete <-- admin
+change_p <-- admin
+
+' products page
+get_products <-- admin
+add <-- admin
+delete_product <-- admin
+details <-- admin
+
+' cart page
+get <-- admin
+delete <-- admin
+
+note left of user : Interact through \na CSP, REST, SOAP
+note right of admin : Interact through \na CSP, REST, SOAP
+
+@enduml

@@ -1,0 +1,26 @@
+@startuml
+object "Broker" as broker{
+    XData = </test>
+}
+
+object "UrlMap: XData" as map{
+    <Route Url="/csp/user" Method="GET" Call="GetAll"/>
+    <Route Url="/csp/user" Method="POST" Call="Creat"/> 
+    <Route Url="/csp/user/:id" Method="DELETE" Call="Delete"/>
+    <Route Url="/csp/user/:id" Method="PUT" Call="Update"/>
+}
+
+broker - map
+object "Site" as site{
+    ID=50
+    Name="Samsung"
+    Price=19999
+    Desctiption="Some desc"
+}
+
+object "SoapHandler" as soap{
+    SERVICENAME = "ShopSOAP"
+    NAMESPACE = "http://tempuri.org"
+    USECLASSNAMESPACES = 1
+}
+@enduml

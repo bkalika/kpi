@@ -1,0 +1,7 @@
+&(executable=test.sh)
+(jobname=testjob)
+(inputFiles=(test.sh "")
+(input.txt "")
+)
+(stdout=out.txt)
+(stderr=err.txt)

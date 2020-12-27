@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Snail Surface Shader View</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+  <script src="three.js"></script>
+  <script type="text/javascript" src="view.js"></script>
+
+<script id="colourVertShader" type="x-shader/x-vertex">
+  varying vec3 vViewPosition;
+  varying vec3 vNormal;
+
+  attribute float vertexDisplacement;
+    uniform float delta;
+    varying float vOpacity;
+    varying vec3 vUv;
+
+  void main() {
+      vec3 transformed = vec3( position );
+      vec4 mvPosition = modelViewMatrix * vec4( transformed, 1.0 ); //Eye-coordinate position
+      vViewPosition = - mvPosition.xyz;
+
+    vUv = position;
+      vOpacity = vertexDisplacement;
+
+      vec3 p = position;
+      p.x += sin(p.y + delta );
+
+        vNormal = normalMatrix * normal;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+   }
+    </script>
+
+    <script id="colourFragShader" type="x-shader/x-fragment">
+    uniform vec4 myColour;
+    varying vec3 vViewPosition; //Translation component of view matrix
+    varying vec3 vNormal;
+
+    uniform float delta;
+      varying float vOpacity;
+      varying vec3 vUv;
+
+
+  struct PointLight {
+    vec3 position;
+    vec3 color;
+    float distance;
+    float decay;
+
+    int shadow;
+    float shadowBias;
+    float shadowRadius;
+    vec2 shadowMapSize;
+    float shadowCameraNear;
+    float shadowCameraFar;
+  };
+
+   uniform PointLight pointLights[ NUM_POINT_LIGHTS ];
+
+    void main() {
+
+      vec3 mvPosition = -vViewPosition; //Eye coordinate space
+
+      vec4 addedLights = vec4(0.1, 0.1, 0.1, 1.0);
+      for(int l = 0; l < NUM_POINT_LIGHTS; l++) {
+        vec3 lightDirection = normalize(pointLights[l].position -  mvPosition   );
+        addedLights.rgb += clamp(dot(lightDirection, vNormal), 0.0, 1.0) * pointLights[l].color;
+      }
+      gl_FragColor = myColour * addedLights;//mix(vec4(diffuse.x, diffuse.y, diffuse.z, 1.0), addedLights, addedLights);
+    }
+    </script>
+
+    <script>
+      
+  var geom = new THREE.ParametricGeometry(snailFunc, 125, 125);
+  geom.scale(20,20,20);
+
+var uniforms = THREE.UniformsUtils.merge([
+    THREE.UniformsLib['ambient'],
+    THREE.UniformsLib['lights'],
+      { 
+        myColour: { value: new THREE.Vector4(1, 1, 1, 1)  },
+        delta: { value: 0}
+      }
+  ]);
+
+  var mat = new THREE.ShaderMaterial( {
+    uniforms: uniforms,
+    vertexShader: document.getElementById( 'colourVertShader' ).textContent,
+    fragmentShader: document.getElementById( 'colourFragShader' ).textContent,
+    lights: true
+  } ); 
+
+  var mesh = new THREE.Mesh(geom, mat); 
+
+  mesh.receiveShadow = true;
+  mesh.castShadow = true;
+
+  var renderer = new THREE.WebGLRenderer({canvas: document.getElementById('myCanvas'), antialias: true});
+        renderer.setClearColor(0xB22222);
+        renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+        
+  var camera =  new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 300, 10000);
+  var scene =  new THREE.Scene();
+
+    var light = new THREE.PointLight(0xffee88,1,1);
+    light.position.set(0,0,0);
+    scene.add(light);
+
+    var sphereLight = new THREE.SphereGeometry(5, 5, 5);
+    var LightMat =  new THREE.MeshLambertMaterial({ color: 0xFF0000});
+    var meshLight = new THREE.Mesh(sphereLight, LightMat);
+    meshLight.position.set(0,0,0);
+    scene.add(meshLight);
+
+  mesh.position.set(0, 0, 0);
+  mesh.rotation.set(Math.PI/4, Math.PI/4, 0);
+
+  camera.position.set(0,0,1000);
+  scene.add(mesh);
+  
+  render();
+  requestAnimationFrame(render);
+  var delta =0;
+
+function render()
+    {
+      delta += 0.1;
+
+      mesh.rotation.x+=0.003;
+      mesh.rotation.z+=0.003;
+
+      light.position.y = 100;
+      light.position.x = 500 * Math.sin(Date.now() / 500);
+        light.position.z = 500 * Math.cos(Date.now() / 500);
+        meshLight.position.y = 150;
+        meshLight.position.x = 250 * Math.cos(Date.now() / 300);
+        meshLight.position.z = 250 * Math.sin(Date.now() / 300);
+        mesh.material.uniforms.delta.value = delta;
+      mesh.material.uniforms.delta.needsUpdate = true;
+
+          renderer.render(scene, camera);
+          requestAnimationFrame(render);
+      }
+    </script>
+</body>
+</html>

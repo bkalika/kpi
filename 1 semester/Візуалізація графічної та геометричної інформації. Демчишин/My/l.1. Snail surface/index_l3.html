@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalika Bohdan, Group #TM-01mp, PA #3. Variant #9. Snail surface with texture mapping with MIP levels.</title>
+    <style>
+        body {margin: 0;
+        }
+
+        canvas {width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="three\examples\js\controls\OrbitControls.js"></script>
+    <script type ="text/javascript">  
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+
+        // light:
+        let spotLight = new THREE.SpotLight(0xeeeece);
+        spotLight.position.set(1000, 1000, 1000);
+        scene.add(spotLight);
+        let spotLight2 = new THREE.SpotLight(0xffffff);
+        spotLight2.position.set(-10, -10, 10);
+        scene.add(spotLight2);
+
+        // renderer:
+        let renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        window.addEventListener('resize', function(){
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        })
+
+        function paraFunction(u0, v0, target) {
+            let uMin = 0;
+            let uMax = Math.PI * 2;
+            let vMin = -Math.PI;
+            let vMax = Math.PI;
+
+            uRange = uMax - uMin;
+            vRange = vMax - vMin;
+
+            let u = uRange * u0 + uMin;
+            let v = vRange * v0 + vMin;
+            let a = 1;
+            let b = 1;
+            let c = 1;
+            let x = function(u, v){return a * u * Math.sin(u) * Math.cos(v)}(u, v);
+            let y = function(u, v){return b * u * Math.cos(u) * Math.cos(v)}(u, v);
+            let z = function(u, v){return -c * u * Math.sin(v)}(u, v);
+            target.set(x, y, z);
+        };
+
+        function imageConvas(size, url) {
+            let imageCanvas = document.createElement("canvas");
+            let context = imageCanvas.getContext("2d");
+            let image = new Image();
+            image.crossOrigin = "";
+            imageCanvas.width = imageCanvas.height = size;
+            context.fillStyle="#f71707";
+            image.src=url;
+            image.onload = function(){  
+                context.fillStyle = context.createPattern(image, "repeat");
+                context.fillRect( 0, 0, size, size );
+            }
+            context.fillRect( 0, 0, size, size );
+            return imageCanvas;
+        }
+
+        let images=[
+            "images_l3/1.jpg",
+            "images_l3/2.jpg",
+            "images_l3/3.jpg",
+            "images_l3/4.jpg"      
+            ];
+
+        let Texture = new THREE.TextureLoader().load(images[0]);
+
+        Texture.mipmaps[0] = imageConvas(8, images[0]);
+        Texture.mipmaps[1] = imageConvas(4, images[1]);
+        Texture.mipmaps[2] = imageConvas(2, images[2]);
+        Texture.mipmaps[3] = imageConvas(1, images[3]);
+
+        Texture.wrapS =THREE.RepeatWrapping;
+        Texture.wrapT = THREE.RepeatWrapping;
+        Texture.minFilter = THREE.LicloseMipMapcloseestFilter;
+
+        Texture.needsUpdate = true;
+        Texture.repeat.set(40, 40);
+
+        // controls:
+        let controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        // material:
+        let geometry = new THREE.ParametricGeometry(paraFunction, 50, 50);
+        let wireframeMaterial = new THREE.MeshBasicMaterial({color: 0xfffff, wireframe: true, transparent: true});
+        let material = new THREE.MeshPhongMaterial({
+            color: 0xdaa520,
+            specular: 0xbcbcbc,
+            transparent: true,
+            map: Texture
+        });
+
+        let mesh = new THREE.Mesh(geometry, material);
+        // wireframeMaterial = new THREE.Mesh(geometry, wireframeMaterial);
+        wireframeMaterial = new THREE.Mesh(geometry, material);
+        mesh.add(wireframeMaterial);
+        scene.add(mesh);
+        scene.background = new THREE.Color(0x151926);
+        camera.position.z = 30;
+
+        function render(){
+            requestAnimationFrame(render);
+            mesh.rotation.y += 0.01;
+            mesh.rotation.z += 0.01;
+            renderer.render(scene, camera);
+        }
+        render();
+    </script>
+
+</body>
+</html>

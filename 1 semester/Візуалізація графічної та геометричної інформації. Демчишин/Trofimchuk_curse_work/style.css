@@ -1,0 +1,49 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+canvas {
+  height: 97vh;
+  width: 85vw;
+}
+
+.menu {
+  background-color: rgb(198, 218, 245);
+  padding: 10px;
+  width: 15vw;
+}
+
+.header {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.move-description-list {
+  list-style-type: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+.move-description-list li {
+  margin: 10px 0;
+}
+
+.vector-color-text {
+  text-transform: uppercase;
+}
+
+.vector-color-blue {
+  color: #0000ff;
+}
+.vector-color-red {
+  color: #ff0000;
+}
+.vector-color-white {
+  color: #ffffff;
+}

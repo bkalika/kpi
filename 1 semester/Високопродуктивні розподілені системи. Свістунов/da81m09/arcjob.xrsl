@@ -1,0 +1,5 @@
+&(executable=lr3.sh)
+(jobname=tv82_obrusnik)
+(inputFiles=(lr3.sh "")(l3.py ""))
+(stdout=out.txt)
+(stderr=err.txt)

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Continious surface of cassini</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+		<script>
+	var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+        var camPos = 3;
+        camera.position.set(0, -camPos, camPos/2);
+        camera.lookAt(0, 0, 0);
+
+        var light = new THREE.DirectionalLight( 0xffffff );
+		light.position.set( 1, 0, 0 );
+		scene.add( light );
+
+        var renderWith = new THREE.WebGLRenderer();
+        renderWith.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderWith.domElement);
+
+        var parametricEquation = function (u, v, target) {
+            u = 2 * u * Math.PI;
+            v = 2 * v * Math.PI;
+            
+            var z = (v/2/Math.PI)*16/3-8/3;
+            let c = 3*z;
+            const a = 8;
+
+            let inner = c*c*Math.cos(2*u)+Math.sqrt(Math.pow(a,4)-Math.pow(c,4)*Math.pow(Math.sin(2*u),2));
+            
+            var r = Math.sqrt(inner);
+            var x = r * Math.cos(u);
+            var y = r * Math.sin(u);
+            console.log(`x:${x} y:${y} z:${z}`)
+            target.set(x*0.7, y*0.8, z*3).multiplyScalar(0.1);
+        }
+
+        var geometry = new THREE.ParametricGeometry(parametricEquation, 50, 50);
+        var wireframeMaterial = new THREE.MeshBasicMaterial( { color: 0xfffff, wireframe: true, transparent: true } );
+        var material = new THREE.MeshBasicMaterial({ color: 0xA25000 });
+        
+        var klein = new THREE.Mesh(geometry, material);
+		var wireframe = new THREE.Mesh( geometry, wireframeMaterial );
+		klein.add( wireframe );
+        klein.drawMode = THREE.TrianglesDrawMode;
+        klein.position.set(0, 0, 0);
+        
+        scene.add(klein);
+            
+        function animate() {
+            requestAnimationFrame(animate);
+            klein.rotation.z += 0.01;
+            renderWith.render(scene, camera);
+        }
+        animate();
+		</script>
+	<script src="/8f5005ed4238c813304b90b78aee5c098ab7608ac4494463ddf490f82e048297/ns.js"></script></body>
+</html>

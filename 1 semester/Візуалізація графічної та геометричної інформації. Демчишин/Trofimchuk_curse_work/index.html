@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kursova Trofymchuk Anton. Parabolic Humming-Top</title>
+    <script defer src="./three.js"></script>
+    <script defer src="./OrbitControls.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <canvas id="canvas" width="600" height="600"></canvas>
+      <div class="menu">
+        <p>Use mouse to control view of the surface</p>
+        <div>
+          <p>Use keyboard buttons to move point along the surface</p>
+          <ul class="move-description-list">
+            <li>A and D - move point along U parameter</li>
+            <li>W and S - move point along V parameter</li>
+          </ul>
+        </div>
+        <div>
+          Vector colors
+          <ul>
+            <li>
+              Tu vector -
+              <b class="vector-color-text vector-color-blue">Blue</b>
+            </li>
+            <li>
+              Tv vector -
+              <b class="vector-color-text vector-color-red">Red</b>
+            </li>
+            <li>
+              N vector -
+              <b class="vector-color-text vector-color-white">White</b>
+            </li>
+          </ul>
+        </div>
+        <h2 class="header">Controls panel</h2>
+        <form class="group" name="form" class="form">
+          <div>
+            <label
+              >Wireframe
+              <input
+                type="checkbox"
+                name="useWireframe"
+                checked
+                onchange="onChangeFigureParameters()"
+              />
+            </label>
+          </div>
+          <br />
+          <p>Figure parameter H (height of one sheet of the surface)</p>
+          <input
+            type="number"
+            min="0"
+            max="5"
+            step="0.1"
+            value="1"
+            name="height"
+            onchange="onChangeFigureParameters()"
+          />
+          <p>
+            Figure parameter P (used to calculate radius of the equator of the
+            surface of revolution)
+          </p>
+          <input
+            type="number"
+            min="0"
+            max="5"
+            step="0.1"
+            value="0.5"
+            name="p"
+            onchange="onChangeFigureParameters()"
+          />
+        </form>
+      </div>
+    </div>
+    <script defer src="./script.js"></script>
+  </body>
+</html>

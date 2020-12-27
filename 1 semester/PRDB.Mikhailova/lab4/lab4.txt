@@ -1,0 +1,88 @@
+ // retailings
+ set retailing1 = ##class(Shop.Account).%New("Bohdan", "Kalika", "+380630422776", "bogdan.kalika@gmail.com")
+ set regularCustomer1 = ##class(Shop.Retailing).%New("Retailing", "Bohdan Kalika, regular client", retailing1, 1)
+ 
+ set retailing2 = ##class(Shop.Account).%New("Iryna", "Mikhailova", "+38077112233", "mikhailova@gmail.com")
+ set regularCustomer2 = ##class(Shop.Retailing).%New(" ", "Iryna Mikhailova, new customer", retailing2, 0)
+ 
+
+// accounts
+ set account11 = ##class(Shop.Account).%New("Tom", "Hanks", "+15446797899", "thanks@gmail.com")
+ set account12 = ##class(Shop.Account).%New("Emma", "Watson", "+1347994648", "ewatson@gmail.com")
+ set accounts1 = ##class(%Library.ArrayOfObjects).%New()
+ do accounts1.SetAt("Tom", account11)
+ do accounts1.SetAt("Tom2", account12)
+ 
+ set address1 = ##class(Shop.Address).%New("0432", "Ukraine", "Lviv", "Donetsky", "13c")
+ set wholesalingCustomer1 = ##class(Shop.Wholesaling).%New("Wholesaling", "PUMB", "Important client", address1, accounts1)
+ 
+
+
+ set account21 = ##class(Shop.Account).%New("Igor", "Sikorsky", "+380443115799", "isikorsky@gmail.com")
+ set account22 = ##class(Shop.Account).%New("Olga", "Saint", "102", "queen@gmail.com")
+ set accounts2 = ##class(%Library.ArrayOfObjects).%New()
+ do accounts2.SetAt("Igor", account21)
+ do accounts2.SetAt("Igor2", account22)
+ 
+ set address2 = ##class(Shop.Address).%New("03316", "Ukraine", "Kyiv", "Svitoshyn", "11")
+ set wholesalingCustomer2 = ##class(Shop.Wholesaling).%New(" ", "KPI", "Usual client", address2, accounts2)
+
+
+
+// products
+ set product1 = ##class(Shop.Product).%New(1, "iPhone", "IPhone XII", 33000, $zdate("04/11/2020",3))
+ set product2 = ##class(Shop.Product).%New(2, "Samsung", "Samsung Galaxy S20", 18000, $zdate("03/11/2020",3))
+ set product3 = ##class(Shop.Product).%New(3, "Nokia", "Nokia 5.3", 4500, $zdate("02/11/2020",3))
+ 
+ set products1 = ##class(%Library.ListOfObjects).%New()
+ do products1.Insert(product1)
+ set attachment1 = ##class(%Stream.GlobalBinary).%New()
+ set order1 = ##class(Shop.Order).%New(regularCustomer1, "In reserve", attachment1, products1, $zdate("25/10/2020",3))
+ 
+ 
+ set products2 = ##class(%Library.ListOfObjects).%New()
+ do products2.Insert(product2)
+ set attachment2 = ##class(%Stream.GlobalBinary).%New()
+ set order2 = ##class(Shop.Order).%New(regularCustomer2, "Done", attachment2, products2, $zdate("13/10/2020",3))
+ 
+ 
+ set products3 = ##class(%Library.ListOfObjects).%New()
+ do products3.Insert(product2)
+ do products3.Insert(product3)
+ set attachment3 = ##class(%Stream.GlobalBinary).%New()
+ set order3 = ##class(Shop.Order).%New(wholesalingCustomer1, "In stock", attachment3, products3, $zdate("15/10/2020",3))
+ 
+ 
+ set products4 = ##class(%Library.ListOfObjects).%New()
+ do products4.Insert(product1)
+ do products4.Insert(product3)
+ set attachment4 = ##class(%Stream.GlobalBinary).%New()
+ set order4 = ##class(Shop.Order).%New(wholesalingCustomer2, "Home delivery", attachment4, products4, $zdate("30/10/2020",3))
+
+ 
+ ////////////////////////////////////////////////////////
+
+ do regularCustomer1.%Save()
+ do regularCustomer2.%Save()
+
+ do address1.%Save()
+ do wholesalingCustomer1.%Save()
+ do address2.%Save()
+ do wholesalingCustomer2.%Save()
+ 
+ do product1.%Save()
+ do product2.%Save()
+ do product3.%Save()
+ 
+ do order1.%Save()
+ do order2.%Save()
+ do order3.%Save()
+ do order4.%Save()
+
+
+ //set phone = ##class(Shop.Product).%New(134," Artur"," +380975447311", 12.3, $ZDATE($PIECE($HOROLOG,",",1)))
+ //do phone.toString()
+ //do phone.%UpdatePrice(10.8,$ZDATE($PIECE($HOROLOG,",",1)))
+ //do phone.toString()
+ //do phone.%Save()
+ 

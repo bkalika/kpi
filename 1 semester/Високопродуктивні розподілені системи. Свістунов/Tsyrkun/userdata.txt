@@ -1,0 +1,8 @@
+#cloud-config
+ssh_pwauth: True
+disable_root: false
+password: 'w9nmBXvxf9H9'
+chpasswd: {expire: false}
+bootcmd:
+ - apt-get update
+ - python3 /root/lab5.py > /root/output.csv

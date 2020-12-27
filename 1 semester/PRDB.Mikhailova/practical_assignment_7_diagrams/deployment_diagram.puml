@@ -1,0 +1,15 @@
+@startuml
+node "IRIS Cache instance" as API{
+}
+
+node "Server" as server {
+    [IRIS.User = Entity.classes]
+    [IRIS.User = HTTPHandler.classes]
+    [IRIS.User = CSP.classes]
+    
+    [Application = CSP.Gateaway]
+    [application = WebServer]
+}
+
+API -- server : TCP/IP
+@enduml

@@ -1,0 +1,5 @@
+&(executable=laba3.sh)
+(jobname=tm_01_kalika)
+(inputFiles=(laba3.sh "")(l3.py ""))
+(stdout=out.txt)
+(stderr=err.txt)

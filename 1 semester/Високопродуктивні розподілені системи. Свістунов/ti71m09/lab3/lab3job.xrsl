@@ -1,0 +1,5 @@
+&(executable=lab3.sh)
+(jobname=lab3)
+(inputFiles=(lab3.sh "")(main.c ""))
+(stdout=out.txt)
+(stderr=err.txt)

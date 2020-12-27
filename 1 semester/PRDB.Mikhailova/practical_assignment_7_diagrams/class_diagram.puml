@@ -1,0 +1,34 @@
+@startuml
+class "%Persistent" as persistent
+class "%Library.Populate" as library
+class "%XML.Adaptor" as adaptor
+class "%SOAP.WebService" as web_service
+class "Product" as site {
+    String name
+    int price
+    String description
+    ArrayList : Array[] images
+    get()
+    create()
+    delete()
+    update()
+}
+class "SoapHandler" as soap_handler
+class "broker" as broker{
+    AcceptsContentType()
+    AccessCheck()
+    DispatchMap()
+    DispatchRequest()
+    Error()
+    Login()
+    
+}
+
+persistent <|-- site
+library <|-- site
+adaptor <|-- site
+web_service <|-- soap_handler
+soap_handler -o site
+site o- broker
+
+@enduml

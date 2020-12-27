@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Snail Surface View</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%
+        }
+    </style>
+</head>
+<body>
+    <script src="js/three.js"></script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 0, 1);
+        camera.lookAt(0, 0, 0);
+
+        var renderWith = new THREE.WebGLRenderer();
+        renderWith.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderWith.domElement);
+
+        var parametricEquation = function (v, u, target) {
+            
+            a = 1;
+            b = 1;
+            
+            u *= Math.PI;
+            v *= 2 * Math.PI;
+            u = u * 2;
+
+            var x = u * Math.cos(v) * Math.sin(u);
+            var y = u * Math.cos(u) * Math.cos(v);
+            var z = -u * Math.sin(v);
+
+            target.set(x, y, z).multiplyScalar(0.75);
+        }
+
+   
+
+        var geometry = new THREE.ParametricGeometry(parametricEquation, 25, 25);
+        var material = new THREE.MeshBasicMaterial({ color: 0xA30000 });
+        var klein = new THREE.Mesh(geometry, material);
+        klein.position.set(0, 0, -25);
+
+        scene.add(klein);
+        function animate() {
+            requestAnimationFrame(animate);
+
+            klein.rotation.x += 0.01;
+            klein.rotation.y += 0.01;
+            renderWith.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
