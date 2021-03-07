@@ -208,6 +208,7 @@ lerna-debug.log
 
 # System Files
 .DS_Store
+<<<<<<< HEAD
 Thumbs.db
 
 
@@ -334,3 +335,6 @@ media/*
 # **/migrations/**
 # !**/migrations
 # !**/migrations/__init__.py
+=======
+Thumbs.db
+>>>>>>> 0816ed2669390a0b34a7f28cc93655ab4e2c5fce
